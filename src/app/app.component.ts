@@ -29,15 +29,15 @@ const firebaseConfig = {
 
 export class AppComponent {
   title = 'simpleCRM';
-  firestore: Firestore = inject(Firestore);
-  app = initializeApp(firebaseConfig);
-  items$: Observable<any[]>;
+  // firestore: Firestore = inject(Firestore);
+  // app = initializeApp(firebaseConfig);
+  // items$: Observable<any[]>;
 
   constructor() {
-    const itemCollection = collection(this.firestore, 'users');
-    this.items$ = collectionData(itemCollection);
-    console.log('update', this.items$.subscribe((g) => {
-      console.log('GameUpdate', g);
-    }));
+    // const itemCollection = collection(this.firestore, 'users');
+    // this.items$ = collectionData(itemCollection);
+    // console.log('update', this.items$.subscribe((g) => {
+    //   console.log('GameUpdate', g);
+    // }));
   }
 }
