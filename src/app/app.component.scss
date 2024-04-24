@@ -4,7 +4,7 @@
 
 .mat-drawer-container {
     height: 100vh;
-    background-color: #333;
+    // background-color: #333;
 }
 
 .menuIcon {
@@ -13,7 +13,7 @@
 
 .sidenav {
     width: 300px;
-    background-color: #555;
+    // background-color: #555;
 }
 
 .logoContainer {
@@ -60,4 +60,5 @@ mat-toolbar, mat-toolbar-row {
 .routerContainer {
     padding-top: 16px;
     padding-left: 56px;
+    padding-right: 56px;
 }
