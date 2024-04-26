@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -8,26 +8,38 @@ import { User } from '../../models/user.class';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { initializeApp } from "firebase/app";
+import { collection, query, onSnapshot, Firestore, getFirestore } from "firebase/firestore";
+import { MatPaginator } from '@angular/material/paginator';
 
 export interface PeriodicElement {
   name: string;
   position: number;
-  weight: number;
-  symbol: string;
+  email: number;
+  city: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+let ELEMENT_DATA: PeriodicElement[] = [
+  {position: 1, name: 'Hydrogen', email: 1.0079, city: 'H'},
+  {position: 2, name: 'Helium', email: 4.0026, city: 'He'},
+  {position: 3, name: 'Lithium', email: 6.941, city: 'Li'},
+  {position: 4, name: 'Beryllium', email: 9.0122, city: 'Be'},
+  {position: 5, name: 'Boron', email: 10.811, city: 'B'},
+  {position: 6, name: 'Carbon', email: 12.0107, city: 'C'},
+  {position: 7, name: 'Nitrogen', email: 14.0067, city: 'N'},
+  {position: 8, name: 'Oxygen', email: 15.9994, city: 'O'},
+  {position: 9, name: 'Fluorine', email: 18.9984, city: 'F'},
+  {position: 10, name: 'Neon', email: 20.1797, city: 'Ne'},
 ];
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAd0uPXiizGQhtdSWPkZHHXfr8KQcADhEI",
+  authDomain: "simplecrm-b3a59.firebaseapp.com",
+  projectId: "simplecrm-b3a59",
+  storageBucket: "simplecrm-b3a59.appspot.com",
+  messagingSenderId: "737703168763",
+  appId: "1:737703168763:web:3e92a6c5bb7ad11af53e5e"
+};
 
 
 @Component({
@@ -37,20 +49,48 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent {
-  user = new User();
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
 
-  constructor(public dialog: MatDialog) {}
+export class UserComponent implements OnInit {
+  user = new User();
+  displayedColumns: string[] = ['position', 'name', 'email', 'city'];
+  dataSource !: MatTableDataSource<PeriodicElement, MatPaginator>;
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(this.app);
+
+  constructor(public dialog: MatDialog) {
+  }
+
+  ngOnInit(): void {
+    const q = query(collection(this.db, "users"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const dbUsers: any[] = [];
+      
+      querySnapshot.forEach((doc) => {
+        dbUsers.push(doc.data());
+      });
+      ELEMENT_DATA = [];
+      const data = dbUsers.forEach(element => {
+        ELEMENT_DATA.push(element.userObject[0]);
+        console.log('elementData', ELEMENT_DATA);
+      });
+      this.dataSource = new MatTableDataSource(ELEMENT_DATA);
+    });
+    // console.log('clData', clearData);
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    console.log(this.dataSource);
   }
 
   openDialog() {
     this.dialog.open(DialogAddUserComponent);
   }
+
+  rowClicked(row : Object){
+    console.log(row, typeof row);
+  }
+
+
+
 }

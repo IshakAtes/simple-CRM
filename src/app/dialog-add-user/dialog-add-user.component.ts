@@ -12,7 +12,7 @@ import { AngularFireDatabase, AngularFireObject} from '@angular/fire/compat/data
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { initializeApp } from 'firebase/app';
-import { addDoc, arrayUnion, getFirestore } from "firebase/firestore";
+import { addDoc, arrayUnion, doc, getFirestore, setDoc } from "firebase/firestore";
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { NgIf } from '@angular/common';
 
