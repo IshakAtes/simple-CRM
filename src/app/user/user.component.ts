@@ -20,16 +20,6 @@ export interface PeriodicElement {
 }
 
 let ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', email: 1.0079, city: 'H'},
-  {position: 2, name: 'Helium', email: 4.0026, city: 'He'},
-  {position: 3, name: 'Lithium', email: 6.941, city: 'Li'},
-  {position: 4, name: 'Beryllium', email: 9.0122, city: 'Be'},
-  {position: 5, name: 'Boron', email: 10.811, city: 'B'},
-  {position: 6, name: 'Carbon', email: 12.0107, city: 'C'},
-  {position: 7, name: 'Nitrogen', email: 14.0067, city: 'N'},
-  {position: 8, name: 'Oxygen', email: 15.9994, city: 'O'},
-  {position: 9, name: 'Fluorine', email: 18.9984, city: 'F'},
-  {position: 10, name: 'Neon', email: 20.1797, city: 'Ne'},
 ];
 
 const firebaseConfig = {
@@ -71,7 +61,7 @@ export class UserComponent implements OnInit {
       ELEMENT_DATA = [];
       const data = dbUsers.forEach(element => {
         ELEMENT_DATA.push(element.userObject[0]);
-        console.log('elementData', ELEMENT_DATA);
+        console.log('changes from db', ELEMENT_DATA);
       });
       this.dataSource = new MatTableDataSource(ELEMENT_DATA);
     });
