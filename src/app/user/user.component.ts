@@ -42,7 +42,7 @@ const firebaseConfig = {
 
 export class UserComponent implements OnInit {
   user = new User();
-  displayedColumns: string[] = ['position', 'name', 'email', 'city'];
+  displayedColumns: string[] = ['customerNo', 'name', 'email', 'city'];
   dataSource !: MatTableDataSource<PeriodicElement, MatPaginator>;
   app = initializeApp(firebaseConfig);
   db = getFirestore(this.app);
@@ -65,7 +65,6 @@ export class UserComponent implements OnInit {
       });
       this.dataSource = new MatTableDataSource(ELEMENT_DATA);
     });
-    // console.log('clData', clearData);
   }
 
   applyFilter(event: Event) {
