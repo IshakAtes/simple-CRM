@@ -9,14 +9,17 @@ import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { initializeApp } from "firebase/app";
-import { collection, query, onSnapshot, Firestore, getFirestore } from "firebase/firestore";
+import { collection, query, onSnapshot, getFirestore } from "firebase/firestore";
 import { MatPaginator } from '@angular/material/paginator';
+import { RouterLink } from '@angular/router';
+import { NgStyle } from '@angular/common';
 
 export interface PeriodicElement {
   name: string;
   position: number;
   email: number;
   city: string;
+  id: string;
 }
 
 let ELEMENT_DATA: PeriodicElement[] = [
@@ -35,14 +38,14 @@ const firebaseConfig = {
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule, MatDialogModule, MatTableModule, MatFormFieldModule, MatInputModule],
+  imports: [MatButtonModule,RouterLink, MatIconModule, MatTooltipModule, MatDialogModule, MatTableModule, MatFormFieldModule, MatInputModule, NgStyle],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
 
 export class UserComponent implements OnInit {
   user = new User();
-  displayedColumns: string[] = ['customerNo', 'name', 'email', 'city'];
+  displayedColumns: string[] = ['name', 'email', 'city', 'customerNo'];
   dataSource !: MatTableDataSource<PeriodicElement, MatPaginator>;
   app = initializeApp(firebaseConfig);
   db = getFirestore(this.app);
@@ -54,14 +57,22 @@ export class UserComponent implements OnInit {
     const q = query(collection(this.db, "users"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const dbUsers: any[] = [];
-      
+
+      let userId = '';
       querySnapshot.forEach((doc) => {
-        dbUsers.push(doc.data());
+        const u = doc.data();
+        u['id'] = doc.id;
+        dbUsers.push(u);
       });
       ELEMENT_DATA = [];
-      const data = dbUsers.forEach(element => {
-        ELEMENT_DATA.push(element.userObject[0]);
-        console.log('changes from db', ELEMENT_DATA);
+      const data = dbUsers.forEach((element) => {
+        const ed = element.userObject[0];
+        ed['id'] = element['id'];
+        ELEMENT_DATA.push(ed);
+        // console.log(ELEMENT_DATA)
+        // console.log('added object', ELEMENT_DATA);
+        // console.log('id,', userId);
+        // console.log(index);
       });
       this.dataSource = new MatTableDataSource(ELEMENT_DATA);
     });

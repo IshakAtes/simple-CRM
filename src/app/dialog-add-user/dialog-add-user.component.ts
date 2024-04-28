@@ -36,10 +36,8 @@ export class DialogAddUserComponent {
   constructor(public dialogRef: MatDialogRef<DialogAddUserComponent>) {}
 
   async saveUser() {
-    const genNo = this.generateRandomCustomerNo();
     this.loading = true;
     this.user.birthDate = this.birthDate.getTime();
-    this.user.customerNo = genNo;
 
     await addDoc(collection(this.firestore, 'users'), {
       userObject: arrayUnion(this.user.toJSON())
@@ -51,9 +49,4 @@ export class DialogAddUserComponent {
     });
   }
 
-  generateRandomCustomerNo() {
-    let range = {min: 1111, max: 9999}
-    let delta = range.max - range.min
-    return Math.round(range.min + Math.random() * delta)
-  }
 }
