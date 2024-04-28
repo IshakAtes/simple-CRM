@@ -1,0 +1,30 @@
+.userDetailHeader {
+    min-height: 250px;
+    background-color: #f58413;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        position: absolute;
+        bottom: -50px;
+    }
+}
+
+div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 100px;
+
+    h2 {
+        font-size: 32px;
+    }
+    span {
+        color: rgba(0, 0, 0, 0.4)
+    }
+}
