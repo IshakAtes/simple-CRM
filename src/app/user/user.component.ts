@@ -58,7 +58,6 @@ export class UserComponent implements OnInit {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const dbUsers: any[] = [];
 
-      let userId = '';
       querySnapshot.forEach((doc) => {
         const u = doc.data();
         u['id'] = doc.id;
@@ -66,13 +65,7 @@ export class UserComponent implements OnInit {
       });
       ELEMENT_DATA = [];
       const data = dbUsers.forEach((element) => {
-        const ed = element.userObject[0];
-        ed['id'] = element['id'];
-        ELEMENT_DATA.push(ed);
-        // console.log(ELEMENT_DATA)
-        // console.log('added object', ELEMENT_DATA);
-        // console.log('id,', userId);
-        // console.log(index);
+        ELEMENT_DATA.push(element);
       });
       this.dataSource = new MatTableDataSource(ELEMENT_DATA);
     });

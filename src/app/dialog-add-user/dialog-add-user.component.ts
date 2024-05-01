@@ -40,7 +40,13 @@ export class DialogAddUserComponent {
     this.user.birthDate = this.birthDate.getTime();
 
     await addDoc(collection(this.firestore, 'users'), {
-      userObject: arrayUnion(this.user.toJSON())
+      firstName: this.user.firstName,
+      lastName: this.user.lastName,
+      birthDate: this.user.birthDate,
+      email: this.user.email,
+      street: this.user.street,
+      zipCode: this.user.zipCode,
+      city: this.user.city,
     })
     .then((result: any) => {
       this.loading = false;
