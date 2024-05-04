@@ -45,7 +45,7 @@ export class DialogAddUserComponent {
       birthDate: this.user.birthDate,
       email: this.user.email,
       street: this.user.street,
-      zipCode: this.user.zipCode,
+      zipCode: +this.user.zipCode,
       city: this.user.city,
     })
     .then((result: any) => {

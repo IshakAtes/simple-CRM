@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { MatNativeDateModule } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), provideAnimationsAsync(),
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
       messagingSenderId: "737703168763",
       appId: "1:737703168763:web:3e92a6c5bb7ad11af53e5e"
     }))),
-    importProvidersFrom(provideFirestore(() => getFirestore()))
+    importProvidersFrom(provideFirestore(() => getFirestore())),
+    importProvidersFrom(MatNativeDateModule)
   ]
 };

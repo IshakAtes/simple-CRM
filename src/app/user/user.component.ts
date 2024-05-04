@@ -81,7 +81,7 @@ export class UserComponent implements OnInit {
   }
 
   rowClicked(row : Object){
-    console.log(row, typeof row);
+    console.log('rowClicked', row, typeof row);
   }
 
 

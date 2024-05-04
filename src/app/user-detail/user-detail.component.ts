@@ -5,11 +5,12 @@ import { initializeApp } from 'firebase/app';
 import { doc, getFirestore, getDoc } from 'firebase/firestore';
 import { User } from '../../models/user.class';
 import { MatIcon } from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.component';
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAd0uPXiizGQhtdSWPkZHHXfr8KQcADhEI",
@@ -32,6 +33,7 @@ export class UserDetailComponent implements OnInit {
   user: User = new User();
   app = initializeApp(firebaseConfig);
   db = getFirestore(this.app);
+  showUserBirthdate!: string;
 
   constructor(private route:ActivatedRoute, public dialog: MatDialog) {}
 
@@ -41,16 +43,50 @@ export class UserDetailComponent implements OnInit {
   }
 
   async getUser() {
-    const docRef = doc(this.db, "users", this.userId);
-    const docSnap = await getDoc(docRef);
-    this.user = new User(docSnap.data());
-    console.log(this.user);
+    // const docRef = doc(this.db, "users", this.userId);
+    // const docSnap = await getDoc(docRef);
+    // this.user = new User(docSnap.data());
+    // this.showUserBirthdate = new Date(this.user.birthDate).toLocaleDateString();
+
+    const q = query(collection(this.db, "users"), where("id", "==", this.userId));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          this.user = new User(change.doc.data());
+          this.showUserBirthdate = new Date(this.user.birthDate).toLocaleDateString();
+          console.log("New user: ", change.doc.data());
+        }
+        if (change.type === "modified") {
+          this.user = new User(change.doc.data());
+          this.showUserBirthdate = new Date(this.user.birthDate).toLocaleDateString();
+          console.log("Modified user: ", change.doc.data());
+        }
+        if (change.type === "removed") {
+          this.user = new User(change.doc.data());
+          this.showUserBirthdate = new Date(this.user.birthDate).toLocaleDateString();
+          console.log("Removed user: ", change.doc.data());
+        }
+      });
+    });
   }
 
   editMenu() {
   }
 
   editUserDetails() {
-    this.dialog.open(DialogEditUserComponent);
+    const dialog = this.dialog.open(DialogEditUserComponent);
+    dialog.componentInstance.user = new User(this.user);
+    dialog.componentInstance.userId = this.userId;
   }
 }
+
+
+
+
+
+// async getUser() {
+//   const docRef = doc(this.db, "users", this.userId);
+//   const docSnap = await getDoc(docRef);
+//   this.user = new User(docSnap.data());
+//   this.showUserBirthdate = new Date(this.user.birthDate).toLocaleDateString();
+// }

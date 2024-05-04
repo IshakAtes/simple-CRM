@@ -1,7 +1,7 @@
 export class User {
     firstName: string;
     lastName: string;
-    birthDate: number;
+    birthDate: number | Date | any;
     email: string;
     street: string;
     zipCode: number;
