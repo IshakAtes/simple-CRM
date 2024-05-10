@@ -40,14 +40,17 @@ export class UserDetailComponent implements OnInit {
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('id');
     this.getUser();
+    this.updateUser();
   }
 
   async getUser() {
-    // const docRef = doc(this.db, "users", this.userId);
-    // const docSnap = await getDoc(docRef);
-    // this.user = new User(docSnap.data());
-    // this.showUserBirthdate = new Date(this.user.birthDate).toLocaleDateString();
+    const docRef = doc(this.db, "users", this.userId);
+    const docSnap = await getDoc(docRef);
+    this.user = new User(docSnap.data());
+    this.showUserBirthdate = new Date(this.user.birthDate).toLocaleDateString();
+  }
 
+  updateUser() {
     const q = query(collection(this.db, "users"), where("id", "==", this.userId));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
